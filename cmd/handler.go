@@ -196,7 +196,7 @@ func isBotReaction(s *discordgo.Session, reactions []*discordgo.MessageReactions
 	return false
 }
 
-func HaveRole(session *discordgo.Session, userID string, userRoleName string) bool{
+func HasRole(session *discordgo.Session, userID string, userRoleName string) bool{
     member, err := session.State.Member(config.Discord.GuildID, userID)
     if err != nil {
         if member, err = session.GuildMember(config.Discord.GuildID, userID); err != nil {

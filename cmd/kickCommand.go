@@ -14,7 +14,7 @@ import (
 func KickCommand(ctx framework.Context) {
     // TODO [!] In progress 
 
-    if !IsAdmin(ctx.Discord, ctx.User.ID){
+    if !HasRole(ctx.Discord, ctx.User.ID, "admin"){
         return
     }
 
