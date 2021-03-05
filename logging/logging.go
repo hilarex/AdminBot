@@ -43,6 +43,14 @@ func initLogging(session *discordgo.Session){
         for _, member := range guildMembers{
         	Log[member.User.ID] = 0
         }
+
+        initdata, _ := json.Marshal(Log)
+        err = ioutil.WriteFile("logdata.json", initdata, 0644)
+        if err != nil{
+            fmt.Println("[!] error Logging : cannot create logdata.json file")
+            return
+        }
+
         return
     }    
     //json.Unmarshal(byteValue, &Log)
@@ -65,7 +73,7 @@ func Logging(){
 
     err = ioutil.WriteFile("logdata.json", newdata, 0644)
     if err != nil{
-        fmt.Println("[!] error Logging : cannot create logdata.json file")
+        fmt.Println("[!] error Logging : cannot write to logdata.json file")
         return
     }
 
