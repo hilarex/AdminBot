@@ -53,7 +53,6 @@ func initLogging(session *discordgo.Session){
 
         return
     }    
-    //json.Unmarshal(byteValue, &Log)
 }
 
 func Logging(){
