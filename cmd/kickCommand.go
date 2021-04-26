@@ -60,7 +60,9 @@ func KickCommand(ctx framework.Context) {
                     if dryrun == false{
                         err = ctx.Discord.GuildMemberDeleteWithReason(config.Discord.GuildID, userid, "inactivity")    
                         if err != nil{
+                            fmt.Println("Error kick : ", err)
                             ctx.Reply( fmt.Sprintf("Error kicking user %s ...", member.User.Username) )
+                            return
                         }
                     }
                 }
