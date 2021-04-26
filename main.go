@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./cmd"
-	"./config"
+	"adminbot/cmd"
+	"adminbot/config"
 
 	"fmt"
 	"github.com/bwmarrin/discordgo"

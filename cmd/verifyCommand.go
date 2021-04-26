@@ -1,9 +1,9 @@
 package cmd
 
 import (
-    "../config"
-    "../framework"
-    "../htb"
+    "adminbot/config"
+    "adminbot/framework"
+    "adminbot/htb"
 
     "github.com/bwmarrin/discordgo"
     "net/http"

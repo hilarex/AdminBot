@@ -1,7 +1,7 @@
 package ippsec
 
 import (
-    "../config"
+    "adminbot/config"
     "fmt"
     "io/ioutil"
     "net/http"

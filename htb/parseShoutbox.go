@@ -1,8 +1,8 @@
 package htb
 
 import (
-    "../config"
-    "../framework"
+    "adminbot/config"
+    "adminbot/framework"
 
     "github.com/bwmarrin/discordgo"
     "fmt"

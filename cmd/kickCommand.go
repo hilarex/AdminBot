@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"../framework"
-    "../config"
+	"adminbot/framework"
+    "adminbot/config"
 
 	"fmt"
     "encoding/json"

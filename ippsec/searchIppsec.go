@@ -1,7 +1,7 @@
 package ippsec
 
 import(
-	"../config"
+	"adminbot/config"
 	"io/ioutil"
 	"encoding/json"
 	"fmt"

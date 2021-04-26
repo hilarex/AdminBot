@@ -1,11 +1,11 @@
 package cmd
 
 import(
-	"../framework"
-	"../config"
-	"../htb"
-	"../ippsec"
-	"../logging"
+	"adminbot/framework"
+	"adminbot/config"
+	"adminbot/htb"
+	"adminbot/ippsec"
+	"adminbot/logging"
 
 	"github.com/bwmarrin/discordgo"
 	"fmt"

@@ -2,7 +2,7 @@ package htb
 
 
 import (
-    "../config"
+    "adminbot/config"
 
     "io/ioutil"
     "encoding/json"

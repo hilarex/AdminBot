@@ -1,7 +1,7 @@
 package htb
 
 import (
-    "../config"
+    "adminbot/config"
     
     "fmt"
     "io/ioutil"

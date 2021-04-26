@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"../framework"
-  	"../ippsec"
+	"adminbot/framework"
+  	"adminbot/ippsec"
 
   	"github.com/bwmarrin/discordgo"
 	"fmt"

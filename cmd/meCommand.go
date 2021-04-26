@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"../framework"
-	"../config"
-	"../htb"
+	"adminbot/framework"
+	"adminbot/config"
+	"adminbot/htb"
 
 	"io/ioutil"
 	"encoding/json"

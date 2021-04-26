@@ -1,8 +1,8 @@
 package logging
 
 import (
-	"../framework"
-	"../config"
+	"adminbot/framework"
+	"adminbot/config"
 	"github.com/bwmarrin/discordgo"
 
 	"fmt"
