@@ -17,8 +17,7 @@ var Mu    sync.Mutex
 var Log   map[string]int64
 
 
-func StartLogging(ticker *time.Ticker, session *discordgo.Session){
-	initLogging(session)
+func StartLogging(ticker *time.Ticker){
     for {
         select {
             case <- ticker.C:
@@ -27,7 +26,7 @@ func StartLogging(ticker *time.Ticker, session *discordgo.Session){
     }
 }
 
-func initLogging(session *discordgo.Session){
+func InitLogging(session *discordgo.Session){
 	Mu.Lock()
 	defer Mu.Unlock()
     _, err := ioutil.ReadFile("logdata.json")
@@ -52,7 +51,9 @@ func initLogging(session *discordgo.Session){
         }
 
         return
-    }    
+    }else{
+        Log = make(map[string]int64)
+    }
 }
 
 func Logging(){

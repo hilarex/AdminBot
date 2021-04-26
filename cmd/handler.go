@@ -17,6 +17,7 @@ import(
 func Ready(session *discordgo.Session, event *discordgo.Ready) {
 
 	htb.Login()
+	logging.InitLogging(session)
 
 	tickerLogin 	:= time.NewTicker(30 * time.Minute)
 	tickerIppsec 	:= time.NewTicker(120 * time.Minute)
@@ -28,7 +29,7 @@ func Ready(session *discordgo.Session, event *discordgo.Ready) {
 	go htb.StartParseShoutbox(tickerShoutbox, session)
 	go htb.StartRefreshUsers(tickerUsers)
 	go ippsec.StartRefreshIppsec(tickerIppsec)
-	go logging.StartLogging(tickerLogging, session)
+	go logging.StartLogging(tickerLogging)
 }
 
 func CommandHandler(session *discordgo.Session, message *discordgo.MessageCreate) {
