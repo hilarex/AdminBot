@@ -10,7 +10,7 @@ import (
 func RoleCommand(ctx framework.Context) {
     
     if len(ctx.Args) == 0{
-        ctx.Reply("Choose a role to add : htb, paris, rennes, toulouse, tours, lille, canada")
+        ctx.Reply("Choose a role to add : htb, paris, rennes, toulouse, tours, lille, aix, canada")
         return
     }
     
@@ -21,7 +21,7 @@ func RoleCommand(ctx framework.Context) {
         roleInput = roleInput[1:]
         remove = true
     }
-    if ! framework.IsInSlice(roleInput, []string{"htb", "paris", "rennes", "toulouse", "tours", "lille", "canada"}){
+    if ! framework.IsInSlice(roleInput, []string{"htb", "paris", "rennes", "toulouse", "tours", "lille", "aix", "canada"}){
     	ctx.Reply("I don't know this role..")
     	return
     }

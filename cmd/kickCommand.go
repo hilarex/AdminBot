@@ -47,6 +47,8 @@ func KickCommand(ctx framework.Context) {
     }
     json.Unmarshal(byteValue, &logdata)
 
+    text := ""
+
     for userid, timestamp := range logdata {
 
         // check number of days since last message
@@ -56,12 +58,12 @@ func KickCommand(ctx framework.Context) {
             if !IsMemberOfTeam(ctx.Discord, userid) && !HasRole(ctx.Discord, userid, "bot"){
                 if err == nil{
                     // kicking user
-                    ctx.Reply( fmt.Sprintf("Kicking user %s (last message was in %s)", member.User.Username, time.Unix(timestamp, 0)) )
+                    text += fmt.Sprintf("Kicking user %s (last message was in %s)", member.User.Username, time.Unix(timestamp, 0)) + '\n'
                     if dryrun == false{
                         err2 := ctx.Discord.GuildMemberDeleteWithReason(config.Discord.GuildID, userid, "inactivity")    
                         if err2 != nil{
                             fmt.Println("Error kick : ", err)
-                            ctx.Reply( fmt.Sprintf("Error kicking user %s ...", member.User.Username) )
+                            text += ctx.Reply( fmt.Sprintf("Error kicking user %s ...", member.User.Username) + '\n'
                             return
                         }
                     }
@@ -69,6 +71,8 @@ func KickCommand(ctx framework.Context) {
             }
         }
     }
+
+    ctx.Reply(text)
 
     return
 }
