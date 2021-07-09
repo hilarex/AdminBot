@@ -47,7 +47,7 @@ func KickCommand(ctx framework.Context) {
     }
     json.Unmarshal(byteValue, &logdata)
 
-    text := ""
+    ctx.Reply("----- list -----")
 
     for userid, timestamp := range logdata {
 
@@ -58,12 +58,12 @@ func KickCommand(ctx framework.Context) {
             if !IsMemberOfTeam(ctx.Discord, userid) && !HasRole(ctx.Discord, userid, "bot"){
                 if err == nil{
                     // kicking user
-                    text += fmt.Sprintf("Kicking user %s (last message was in %s)", member.User.Username, time.Unix(timestamp, 0)) + '\n'
+                    ctx.Reply( fmt.Sprintf("Kicking user %s (last message was in %s)", member.User.Username, time.Unix(timestamp, 0)) )
                     if dryrun == false{
                         err2 := ctx.Discord.GuildMemberDeleteWithReason(config.Discord.GuildID, userid, "inactivity")    
                         if err2 != nil{
                             fmt.Println("Error kick : ", err)
-                            text += ctx.Reply( fmt.Sprintf("Error kicking user %s ...", member.User.Username) + '\n'
+                            ctx.Reply( fmt.Sprintf("Error kicking user %s ...", member.User.Username) )
                             return
                         }
                     }
@@ -72,7 +72,7 @@ func KickCommand(ctx framework.Context) {
         }
     }
 
-    ctx.Reply(text)
+    ctx.Reply("--- end list ---")
 
     return
 }
