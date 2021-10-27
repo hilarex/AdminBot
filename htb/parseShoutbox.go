@@ -37,20 +37,13 @@ func ParseShoutbox(session *discordgo.Session) {
 function to parse shoutbox api
 */
 
-    // Flag fortress
-    //<p><span class="text-info">[May 19 14:07]</span> <a href="https://www.hackthebox.eu/home/users/profile/57310">stoneric</a> got flag <span class="text-success">Plain Sight</span> from <a href="https://www.hackthebox.eu/home/careers/company/61">AKERVA</a> <span class="c-white"><i class="fab fa-fort-awesome"></i> Fortress</span> <a class="nohover" href="https://twitter.com/intent/tweet?text=stoneric just got flag Plain Sight from AKERVA Fortress!&amp;url=https://www.hackthebox.eu&amp;via=hackthebox_eu"><span class="text-info">[<i class="fab fa-twitter"></i>Tweet]</span></a></p>
-    // Flag starting point 
-    //<p><span class="text-info">[May 19 14:18]</span> <a href="https://www.hackthebox.eu/home/users/profile/295408">TrashPanda</a> owned <span class="text-success">root</span> flag on <span class="text-success">Vaccine</span> from <a href="/home/start">Starting Point</a> <a class="nohover" href="https://twitter.com/intent/tweet?text=TrashPanda just owned user on Vaccine from Starting Point!&amp;url=https://www.hackthebox.eu&amp;via=hackthebox_eu"><span class="text-info">[<i class="fab fa-twitter"></i>Tweet]</span></a></p>
-    // Flag Offshore
-    //<p><span class="text-info">[May 19 14:23]</span> <a href="https://www.hackthebox.eu/home/users/profile/4093">bmantra</a> got flag <span class="text-success">Ippsec leaves his mark</span> from <span class="text-info">Offshore</span> <a class="nohover" href="https://twitter.com/intent/tweet?text=bmantra just got flag Ippsec leaves his mark from Offshore !&amp;url=https://www.hackthebox.eu&amp;via=hackthebox_eu"><span class="text-info">[<i class="fab fa-twitter"></i>Tweet]</span></a></p>
-
     regexList := map[string]string{
             "box_pwn": `(?:.*)profile\/(\d+)\">(?:.*)<\/a> owned (.*) on <a(?:.*)profile\/(?:\d+)\">(.*)<\/a> <a(?:.*)`,
             "chall_pwn": `(?:.*)profile\/(\d+)\">(?:.*)<\/a> solved challenge <(?:.*)>(.*)<(?:.*)><(?:.*)> from <(?:.*)>(.*)<(?:.*)><(?:.*)`,
             //OLD "prolab_pwn": `(?:.*)profile\/(\d+)\">(?:.*)<\/a> got flag <(?:.*)>(.*)<\/span> from <(?:.*)>(.+?)<\/span> <`,
             "prolab_pwn": `(?:.*)profile\/(\d+)\">(?:.*)just got flag (.+?) from (.+?)!`,
-            "new_box_incoming": `(?:.*)Get ready to spill some (?:.* blood .*! <.*>)(.*)<(?:.* available in <.*>)(.*)<(?:.*)><(?:.*)`,
-            "new_box_out": `(?:.*)>(.*)<(?:.*) is mass-powering on! (?:.*)`,
+            //OLD "new_box_incoming": `(?:.*)Get ready to spill some (?:.* blood .*! <.*>)(.*)<(?:.* available in <.*>)(.*)<(?:.*)><(?:.*)`,
+            //OLD "new_box_out": `(?:.*)>(.*)<(?:.*) is mass-powering on! (?:.*)`,
             "vip_upgrade": `(?:.*)profile\/(\d+)\">(?:.*)<\/a> became a <(?:.*)><(?:.*)><(?:.*)> V.I.P <(?:.*)`,
     }
 
@@ -143,7 +136,7 @@ function to parse shoutbox api
                             msg, _ := session.ChannelMessageSend(config.Discord.Shoutbox, fmt.Sprintf("🍾 %v became VIP ! Take out the champagne 🥂", member.Mention()))
                             session.MessageReactionAdd(msg.ChannelID, msg.ID, "🍾")
                         }
-                    case "new_box_incoming":
+                    /*case "new_box_incoming":
                         timeRemaining := strings.Split(match[2], ":")
                         // match hours and minutes to prevent spam
                         if framework.IsInSlice(timeRemaining[0], []string{"19", "05", "00"}){
@@ -154,6 +147,7 @@ function to parse shoutbox api
                         }
                     case "new_box_out":
                         session.ChannelMessageSend(newHtbChannelID, fmt.Sprintf("🚨 new box %v is live ! 🚨\nWill you get first blood ?", match[1]))
+                    */
                     default:
                         session.ChannelMessageSend(config.Discord.Shoutbox, fmt.Sprintf(typeOfNotif,"=",match[1:]))
                 }
@@ -172,7 +166,7 @@ func getNewNotifPos(last string, notifs []string) int{
     return 0
 }
 
-
+/*
 func manageHtbChannel(session *discordgo.Session, boxName string){
     var channelsInCategory []*discordgo.Channel
     boxName = strings.ToLower(boxName)
@@ -218,3 +212,4 @@ func manageHtbChannel(session *discordgo.Session, boxName string){
 
     return
 }
+*/

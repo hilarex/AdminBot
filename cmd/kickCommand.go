@@ -51,11 +51,13 @@ func KickCommand(ctx framework.Context) {
 
     for userid, timestamp := range logdata {
 
+        time_days := (time.Now().Unix() - int64(days * 24*60*60) )
         // check number of days since last message
-        if timestamp < (time.Now().Unix() - int64(days * 24*60*60) ){
-            member, err := ctx.Discord.GuildMember(config.Discord.GuildID, userid)
+        if timestamp < time_days {
             
             if !IsMemberOfTeam(ctx.Discord, userid) && !HasRole(ctx.Discord, userid, "bot"){
+                
+                member, err := ctx.Discord.GuildMember(config.Discord.GuildID, userid)
                 if err == nil{
                     // kicking user
                     ctx.Reply( fmt.Sprintf("Kicking user %s (last message was in %s)", member.User.Username, time.Unix(timestamp, 0)) )

@@ -232,6 +232,7 @@ func IsMemberOfTeam(session *discordgo.Session, userID string) bool{
 
     guildRoles, _ := session.GuildRoles(config.Discord.GuildID)
     for _, guildRole := range guildRoles{
+
     	if strings.ToLower(guildRole.Name) == "pirates" || strings.ToLower(guildRole.Name) == "hideandsec" {
     		if framework.IsInSlice(guildRole.ID, member.Roles){
     			result = true
