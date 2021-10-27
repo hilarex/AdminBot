@@ -40,6 +40,10 @@ func CommandHandler(session *discordgo.Session, message *discordgo.MessageCreate
 	}
 	content := message.Content
 
+	if len(content) <= len(config.Prefix) {
+		return
+	}
+
 	// All messages that don't have the prefix
 	if content[:len(config.Prefix)] != config.Prefix {
 		// Log user message date
@@ -49,9 +53,6 @@ func CommandHandler(session *discordgo.Session, message *discordgo.MessageCreate
 		return
 	}
 
-	if len(content) <= len(config.Prefix) {
-		return
-	}
 	
 	content = content[len(config.Prefix):]
 	if len(content) < 1 {

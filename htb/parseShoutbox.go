@@ -2,7 +2,7 @@ package htb
 
 import (
     "adminbot/config"
-    "adminbot/framework"
+    //"adminbot/framework"
 
     "github.com/bwmarrin/discordgo"
     "fmt"
@@ -11,7 +11,7 @@ import (
     "encoding/json"
     "regexp"
     "strconv"
-    "strings"
+    //"strings"
     "time"
 )
 
