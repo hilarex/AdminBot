@@ -6,10 +6,11 @@ import (
     "net/http"
     "io/ioutil"
     "time"
-    "regexp"
+    "encoding/json"
+//    "regexp"
     "strconv"
     "fmt"
-    "strings"
+//    "strings"
     "sync"
 )
 
@@ -24,12 +25,12 @@ Get information about an user by scrapping his HTB profil
 
     client := &http.Client{
         Timeout: time.Second * 10,
-        Jar: config.Htbcookies,
     }
 
     // Get request for userId
-    req, err := http.NewRequest("GET", "https://www.hackthebox.eu/home/users/profile/"+strconv.Itoa(user.UserID), nil)
+    req, err := http.NewRequest("GET", "https://www.hackthebox.com/api/v4/user/profile/basic/"+strconv.Itoa(user.UserID), nil)
     req.Header.Add("User-Agent", config.USERAGENT)
+    req.Header.Add("Authorization", "Bearer "+config.HtbToken.Message.AccessToken)
     resp, err := client.Do(req)
     if err != nil {
         print(err)
@@ -44,81 +45,37 @@ Get information about an user by scrapping his HTB profil
     }
 
     // Read response
-    body, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        print(err)
-        return
-    }
-    html := string(body)
+    body, _ := ioutil.ReadAll(resp.Body)
 
-    var VIP bool
-    var username, avatar, points, systems, users, respect, country, teamName, level, rank, challenges, ownership string
+    var infos map[string](map[string](interface{}))
+    json.Unmarshal([]byte(body), &infos)
 
-    // Scrapping with regex
-    r := regexp.MustCompile(`<small> Member (.+?) is at position (\d+) of the Hall of Fame.`)
-    match := r.FindStringSubmatch(html)
-    if match != nil{
-        rank = match[2]
+    if  fmt.Sprintf("%s", infos["profile"]["isVip"]) == "true" {
+        user.VIP = true
+    } else {
+        user.VIP = false
     }
-    r = regexp.MustCompile(`www.hackthebox.eu/home/teams/profile/(\d+)\">(.+?)<`)
-    match = r.FindStringSubmatch(html)
-    if(match != nil){
-        //teamID = match[1]
-        teamName = match[2]
-    }
-    r = regexp.MustCompile(`([a-zA-Z]+)"><span class="flag flag-`)
-    match = r.FindStringSubmatch(html)
-    if(match != nil){
-        country = match[1]
-    }
-    r = regexp.MustCompile(`V.I.P Member`)
-    match = r.FindStringSubmatch(html)
-    if(match != nil){
-        VIP = true
-    }
+    user.Username = fmt.Sprintf("%s", infos["profile"]["name"])
+    user.Ownership = fmt.Sprintf("%s", infos["profile"]["rank_ownership"])
+    user.Avatar = fmt.Sprintf("%s", infos["profile"]["avatar"])
+    user.Points = fmt.Sprintf("%s", infos["profile"]["points"])
+    user.Systems = fmt.Sprintf("%s", infos["profile"]["system_owns"])
+    user.Users = fmt.Sprintf("%s", infos["profile"]["user_owns"])
+    user.Respect = fmt.Sprintf("%s", infos["profile"]["respects"])
+    user.Country = fmt.Sprintf("%s", infos["profile"]["country_name"])
+    user.Level = fmt.Sprintf("%s", infos["profile"]["rank"])
+    user.Rank = fmt.Sprintf("%s", infos["profile"]["ranking"])
 
-    r = regexp.MustCompile(`<td class="col-md-3 text-right"> (RastaLabs|Offshore|Cybernetics) </td> <td> <div> <div data-toggle="tooltip" title="(([0-9]*[.])?[0-9]+)\%"`)
-    prolabs := r.FindAllStringSubmatch(html, -1)
-    tmp := make(map[string]string)
-    for i,_ := range prolabs{
-        tmp[ strings.ToLower(prolabs[i][1]) ] = prolabs[i][2]
+    if(infos["profile"]["team"] != nil){
+        team := infos["profile"]["team"].(map[string]interface{})
+    }else{
+        user.Team = ""
     }
-    user.Prolabs = tmp
     
-    r = regexp.MustCompile("Ownership: (.+?)%")
-    ownership = r.FindStringSubmatch(html)[1]
-    r  = regexp.MustCompile(`>Rank: (.+?)<`)
-    level = r.FindStringSubmatch(html)[1]
-    r = regexp.MustCompile(`title="Points">(.+?)(\d+)<`)
-    points = r.FindStringSubmatch(html)[2]
-    r = regexp.MustCompile(`title="Owned Systems">(.+?)(\d+)<`)
-    systems = r.FindStringSubmatch(html)[2]
-    r = regexp.MustCompile(`title="Owned Users">(.+?)(\d+)<`)
-    users = r.FindStringSubmatch(html)[2]
-    r = regexp.MustCompile(`title="Respect">(.+?)(\d+)<`)
-    respect = r.FindStringSubmatch(html)[2]
-    r = regexp.MustCompile(`align="left" src="https://www.hackthebox.eu/storage/avatars/([0-9a-z]+)\.png`)
-    avatar = "https://www.hackthebox.eu/storage/avatars/"+r.FindStringSubmatch(html)[1]+".png"
-    r = regexp.MustCompile(`has solved (\d+) challenges`)
-    challenges = r.FindStringSubmatch(html)[1]
-    r = regexp.MustCompile(`class="m-n">(.+?) <`)
-    username = r.FindStringSubmatch(html)[1]
 
-    user.VIP = VIP
-    user.Username = username 
-    user.Ownership = ownership
-    user.Avatar = avatar
-    user.Points = points
-    user.Systems = systems
-    user.Users = users
-    user.Respect = respect
-    user.Country = country
-    user.Team = teamName
-    user.Level = level
-    user.Rank = rank
-    user.Challs = challenges
-    user.Ownership = ownership
-
+  //  user.Team = team["name"]
+    // TODO PROGRESS
+/*
     if progress != nil{
         r = regexp.MustCompile(username+` owned (root|user) (?:.*?)(?:\d)">(.*?)<\/a>`)
         matches := r.FindAllStringSubmatch(html, -1)
@@ -135,6 +92,6 @@ Get information about an user by scrapping his HTB profil
             }
         }
     }
-
+*/
     return 
 }

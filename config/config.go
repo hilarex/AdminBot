@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
-	"net/http/cookiejar"
 )
 
 // Struct for config.json
@@ -22,6 +21,15 @@ type ConfigDiscord struct {
 	Token 	    string `json:"bot_token"`
 	GuildID		string `json:"guild_id"`
 	Shoutbox    string `json:"shoutbox_id"`
+}
+
+type HtbTokenBase struct{
+	AccessToken		string	`json:"access_token"`
+	RefreshToken	string	`json:"refresh_token"`
+	is2FAEnabled	bool	`json:"is2FAEnabled"`
+}
+type HtbTokenStruct struct{
+	Message HtbTokenBase	`json:"message"`
 }
 
 // Struct for Users json file
@@ -74,11 +82,11 @@ type Notifs struct{
 var Prefix string
 var Htb ConfigHtb
 var Discord ConfigDiscord
-
+var HtbToken HtbTokenStruct
 
 // Variable for http.Client
 const USERAGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.85 Safari/537.36"
-var Htbcookies *cookiejar.Jar
+
 
 func init(){
 	

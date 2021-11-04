@@ -3,15 +3,17 @@ package htb
 import (
     "adminbot/config"
     
-    "fmt"
     "io/ioutil"
     "net/http"
-    "net/http/cookiejar"
 
-    "regexp"
-    "net/url"
+    "encoding/json"
+
+//  "regexp"
+//  "net/url"
+//  "crypto/tls"
+    "bytes"
     "time"
-    "strings"
+//  "strings"
 )
 
 func StartLogin(ticker *time.Ticker){
@@ -25,35 +27,51 @@ func StartLogin(ticker *time.Ticker){
 
 func Login() {
 
-	// Create cookie jar
-	jar, _ := cookiejar.New(nil)
-/*	proxyUrl, err := url.Parse("http://127.0.0.1:8080")
+/*
+	proxyUrl, err := url.Parse("http://127.0.0.1:8080")
 	tr := &http.Transport{
         TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
         Proxy: http.ProxyURL(proxyUrl),
     }
 */
+
 	client := &http.Client{
   		Timeout: time.Second * 10,
-  		Jar: jar,
 // 		Transport: tr,
 	}
 	
-	// Request for csrf token
-	req, err := http.NewRequest("GET", "https://www.hackthebox.eu/login", nil)
-	req.Header.Add("User-Agent", config.USERAGENT)
-	resp, err := client.Do(req)
+	// Request for login
+    var jsonData = []byte(`{
+        "email" : "`+config.Htb.Email+`",
+        "password" : "`+config.Htb.Password+`",
+        "remember" : true
+    }`)
+
+    req, err := http.NewRequest("POST", "https://www.hackthebox.com/api/v4/login", bytes.NewBuffer(jsonData))
+    req.Header.Add("User-Agent", config.USERAGENT)
+    req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+
+    resp, err := client.Do(req)
     if err != nil {
         print(err)
         return
     }
     defer resp.Body.Close()
-    
- 	body, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        print(err)
+
+    if resp.Status != "200 OK" {
+        print(resp.Status)
         return
     }
+    
+ 	body, _ := ioutil.ReadAll(resp.Body)
+    //var htbtoken config.HtbToken
+
+    json.Unmarshal(body, &config.HtbToken)
+
+
+    //=========================================================
+
+    /*
 
     // find token 
     r, _ := regexp.Compile("type=\"hidden\" name=\"_token\" value=\"(.+?)\"")
@@ -85,6 +103,7 @@ func Login() {
     }
 
     config.Htbcookies = jar
+    */
 
     return
 }
