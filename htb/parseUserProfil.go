@@ -67,7 +67,8 @@ Get information about an user by scrapping his HTB profil
     user.Rank = fmt.Sprintf("%s", infos["profile"]["ranking"])
 
     if(infos["profile"]["team"] != nil){
-        team := infos["profile"]["team"].(map[string]interface{})
+        team, _ := infos["profile"]["team"].(map[string]interface{})
+        user.Team = fmt.Sprintf("%s", team["name"])
     }else{
         user.Team = ""
     }
